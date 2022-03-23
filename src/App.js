@@ -1,12 +1,36 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+
 import Header from "./components/Header";
+import Dialog from './components/Dialog';
+import Sender from './components/Sender';
+
+import { AppContext } from './context';
+import { getTheme, setTheme } from './helpers/theme';
 
 const App = () => {
+  const [message, addMessage] = useState(null);
+  const [theme, toggleTheme] = useState(getTheme());
+
+  useEffect(() => {
+    setTheme(theme)
+  }, [theme]);
+
+  useEffect(() => {
+    console.log('Приложение отрендерилось - App is rendered');
+  }, []);
+
   return ( 
-    <div className='container' >
-      <Header />
-      <h1>Hello world</h1>
-    </div>
+    <AppContext.Provider 
+      value={{
+        theme,
+        toggleTheme,
+      }} >
+      <div className='container' >
+        <Header />
+        <Dialog newMessage={message} />
+        <Sender onAddMessage={addMessage} />
+      </div>
+    </AppContext.Provider>
   );
 }
  
